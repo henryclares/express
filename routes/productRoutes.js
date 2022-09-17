@@ -1,12 +1,18 @@
-const express = require('express');
-const productController = require('./../controllers/productController');
+const express = require("express");
+const productController = require("./../controllers/productController");
+const authController = require("./../controllers/authController");
 const productRouter = express.Router();
 //routes
 productRouter
-  .route('/')
+  .route("/")
+  .all(authController.protect)
   .get(productController.getAllProducts)
   .post(productController.addProduct);
-productRouter.route('/:id').get(productController.getProductById);
-productRouter.route('/:id').put(productController.updateProductById);
-productRouter.route('/:id').delete(productController.deleteProductById);
+productRouter
+  .route("/:id")
+  .all(authController.protect)
+  .get(productController.getProductById)
+  .delete(productController.deleteProductById)
+  .put(productController.updateProduct);
+
 module.exports = productRouter;
